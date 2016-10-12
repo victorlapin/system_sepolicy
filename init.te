@@ -180,6 +180,7 @@ domain_trans(init, init_exec, watchdogd)
 userdebug_or_eng(`
   domain_auto_trans(init, logcat_exec, logd)
 ')
+domain_trans(init, system_file, arise)
 
 # Init will create /data/misc/logd when the property persist.logd.logpersistd is "logcatd".
 # Init will also walk through the directory as part of a recursive restorecon.
