@@ -159,6 +159,7 @@ neverallow {
   -vold
   -dumpstate
   -system_server
+  -arise
   userdebug_or_eng(`-perfprofd')
 } self:capability sys_ptrace;
 
@@ -300,6 +301,7 @@ neverallow {
   domain
   -appdomain
   -su
+  -dolby
 } {
   data_file_type
   -dalvikcache_data_file
@@ -347,7 +349,7 @@ neverallow { domain -su } default_android_service:service_manager add;
 
 # Require that domains explicitly label unknown properties, and do not allow
 # anyone but init to modify unknown properties.
-neverallow { domain -init -su -arise} default_prop:property_service set;
+neverallow { domain -init -su -arise -dolby } default_prop:property_service set;
 neverallow { domain -init -su } mmc_prop:property_service set;
 
 neverallow { domain -init -recovery -system_server -su } frp_block_device:blk_file rw_file_perms;
@@ -439,7 +441,7 @@ neverallow { domain -init -untrusted_app -platform_app -priv_app userdebug_or_en
 # https://code.google.com/p/android/issues/detail?id=23203
 # which, long term, need to go away.
 ifelse(target_needs_platform_text_relocations, `true',
- `neverallow { domain -su -mediaserver -cameraserver } {
+ `neverallow { domain -su -mediaserver -cameraserver -audioserver } {
     file_type
     -system_data_file
     -apk_data_file
@@ -447,7 +449,7 @@ ifelse(target_needs_platform_text_relocations, `true',
     -asec_public_file
   }:file execmod;'
 ,
- `neverallow { domain -su } {
+ `neverallow { domain -su -audioserver } {
     file_type
     -system_data_file
     -apk_data_file
@@ -465,9 +467,9 @@ neverallow { domain -su } self:process { execstack execheap };
 # with text relocations. b/20013628 .
 
 ifelse(target_needs_platform_text_relocations, `true',
- `neverallow { domain -appdomain -mediaserver -cameraserver } file_type:file execmod;'
+ `neverallow { domain -appdomain -mediaserver -cameraserver -audioserver } file_type:file execmod;'
 ,
- `neverallow { domain -appdomain } file_type:file execmod;'
+ `neverallow { domain -appdomain -audioserver } file_type:file execmod;'
 )
 
 neverallow { domain -su -init } proc:{ file dir } mounton;
