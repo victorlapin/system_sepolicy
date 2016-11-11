@@ -23,7 +23,7 @@ userdebug_or_eng(`
   domain_auto_trans(su, dumpstate_exec, dumpstate)
 
   # su is also permissive to permit setenforce.
-  #permissive su;
+  permissive su;
 
   # Add su to various domains
   net_domain(su)
