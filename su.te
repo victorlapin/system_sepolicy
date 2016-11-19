@@ -22,15 +22,14 @@ userdebug_or_eng(`
   # from the "init" domain.
   domain_auto_trans(su, dumpstate_exec, dumpstate)
 
-  # su is also permissive to permit setenforce.
-  permissive su;
+  # permit setenforce.
+  selinux_setenforce(su)
 
   # Add su to various domains
   net_domain(su)
   app_domain(su)
 
   allow su self:capability_class_set *;
-  #allow su kernel:security *;
   allow su kernel:system *;
   allow su self:memprotect *;
   allow su domain:process *;
